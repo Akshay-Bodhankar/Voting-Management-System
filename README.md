@@ -1,12 +1,12 @@
 # 🗳️ Voting Management System on a Simple Blockchain
 
-A simple blockchain-based **Voting Management System** developed in Python. The project demonstrates how blockchain concepts can be used to record and maintain voting transactions in a tamper-evident chain.
+A simple blockchain-based **Voting Management System** developed in Python. The project demonstrates how blockchain concepts can be used to record voting transactions in a tamper-evident chain.
 
 ## 📌 Overview
 
-The system allows administrators to manage voters and candidates and record votes on a simple blockchain.
+The system allows candidates and voters to be registered and votes to be recorded on a simple blockchain.
 
-Each vote is stored as a block containing the voter and candidate information. Blocks are connected using cryptographic hashes, ensuring the integrity of the blockchain.
+Each vote is stored as a block containing the voter and candidate information. Blocks are connected using cryptographic hashes, creating a chain that can be validated for integrity.
 
 ## ✨ Features
 
@@ -20,8 +20,8 @@ Each vote is stored as a block containing the voter and candidate information. B
 * Generate SHA-256 hashes
 * Link blocks using previous hashes
 * Display blockchain contents
-* Validate blockchain integrity
 * Count votes for each candidate
+* Validate blockchain integrity
 
 ## 🏗️ Blockchain Structure
 
@@ -113,11 +113,11 @@ Example:
 V001 → C001
 ```
 
-means voter `V001` voted for candidate `C001`.
+This means voter `V001` voted for candidate `C001`.
 
 ## 📊 Vote Counting
 
-Votes are calculated by examining the candidate ID stored in each vote block.
+The system counts votes by examining the `candidate_id` stored in each vote block.
 
 For example:
 
@@ -125,25 +125,99 @@ For example:
 V001 → C001
 V002 → C002
 V003 → C001
+V004 → C003
+V005 → C001
 ```
 
-Results:
+The resulting vote count is:
 
 ```text
-C001 - Candidate A: 2 votes
-C002 - Candidate B: 1 vote
+===== Vote Counts =====
+
+C001 - Candidate A: 3 vote(s)
+C002 - Candidate B: 1 vote(s)
+C003 - Candidate C: 1 vote(s)
 ```
 
-## ⛓️ Blockchain Validation
+The Genesis block is excluded from the vote count because it does not represent an actual vote.
 
-The blockchain can be validated by checking:
+## 📋 Available Operations
 
-* The current block's hash
-* The recalculated hash of the current block
-* The previous hash stored in the current block
-* The actual hash of the previous block
+The system provides the following menu:
 
-If any block has been modified, the validation will fail.
+```text
+===== Voting Management System =====
+
+1. Add Candidate
+2. Add Voter
+3. Cast Vote
+4. Count Votes
+5. Print Blockchain
+6. Validate Chain
+7. Exit
+```
+
+### 1. Add Candidate
+
+Adds a candidate using:
+
+* Candidate ID
+* Candidate Name
+
+Duplicate candidate IDs are not allowed.
+
+### 2. Add Voter
+
+Adds a voter using:
+
+* Voter ID
+* Voter Name
+
+Duplicate voter IDs are not allowed.
+
+### 3. Cast Vote
+
+Records a vote for a registered candidate.
+
+The system checks that:
+
+* The voter exists.
+* The candidate exists.
+* The voter has not already voted.
+
+
+### 4. Count Votes
+
+Calculates and displays the total number of votes received by each candidate.
+
+Example:
+
+```text
+C001 - Candidate A: 3 vote(s)
+C002 - Candidate B: 1 vote(s)
+C003 - Candidate C: 1 vote(s)
+```
+
+
+### 5. Print Blockchain
+
+Displays the blocks stored in the blockchain, including:
+
+* Index
+* Timestamp
+* Voter ID
+* Candidate ID
+* Previous Hash
+* Hash
+
+### 6. Validate Chain
+
+Checks the integrity of the blockchain by verifying:
+
+* The current block's hash.
+* The recalculated hash of the current block.
+* The previous hash stored in the current block.
+* The hash of the previous block.
 
 Example:
 
@@ -151,16 +225,108 @@ Example:
 Blockchain is valid.
 ```
 
-## 📋 Available Operations
+### 7. Exit
+
+Terminates the application.
+
+## 🧪 Validation
+
+The project includes validation for the following cases.
+
+### Duplicate Candidate ID
 
 ```text
-1. Add Candidate
-2. Add Voter
-3. Cast Vote
-4. Print Blockchain
-5. Validate Chain
-6. Exit
+Candidate ID: C001
+Candidate Name: Candidate C
+
+Candidate ID already exists.
 ```
+
+### Duplicate Voter ID
+
+```text
+Voter ID: V001
+Voter Name: Another Person
+
+Voter ID already exists.
+```
+
+### Double Voting
+
+If a voter attempts to vote again:
+
+```text
+Voter ID: V001
+Candidate ID: C002
+
+Voter has already voted.
+```
+
+The rejected vote is not added to the blockchain.
+
+### Invalid Voter
+
+```text
+Voter ID: V999
+Candidate ID: C001
+
+Voter not found.
+```
+
+### Invalid Candidate
+
+```text
+Voter ID: V006
+Candidate ID: C999
+
+Candidate not found.
+```
+
+### Invalid Menu Option
+
+If an invalid menu option is entered:
+
+```text
+Invalid choice. Please try again.
+```
+
+## 🔗 Example Blockchain
+
+A blockchain containing three votes may look like:
+
+```text
+===== Blockchain Contents =====
+
+Index: 0
+Voter ID: Genesis
+Candidate ID: None
+Previous Hash: 0
+Hash: <genesis-hash>
+----------------------------------------
+
+Index: 1
+Voter ID: V001
+Candidate ID: C001
+Previous Hash: <genesis-hash>
+Hash: <block-1-hash>
+----------------------------------------
+
+Index: 2
+Voter ID: V002
+Candidate ID: C002
+Previous Hash: <block-1-hash>
+Hash: <block-2-hash>
+----------------------------------------
+
+Index: 3
+Voter ID: V003
+Candidate ID: C001
+Previous Hash: <block-2-hash>
+Hash: <block-3-hash>
+----------------------------------------
+```
+
+The `Previous Hash` of each block should match the `Hash` of the block immediately before it.
 
 ## 🛠️ Technologies Used
 
@@ -180,6 +346,16 @@ Voting-Management-System/
 ```
 
 ## 🚀 Getting Started
+
+### Prerequisites
+
+Python 3 is required.
+
+Check your Python version:
+
+```bash
+python --version
+```
 
 ### Clone the Repository
 
@@ -203,11 +379,11 @@ python voting.py
 
 This project is a **simple blockchain implementation for learning and demonstration purposes**.
 
-It focuses on understanding fundamental blockchain concepts such as:
+It focuses on fundamental blockchain concepts such as:
 
 * Blocks
-* Transactions
-* Hashing
+* Voting transactions
+* Cryptographic hashing
 * Previous-hash linking
 * Chain validation
 * Data integrity
@@ -225,12 +401,13 @@ The project demonstrates the practical implementation of:
 * Blockchain linking
 * Blockchain validation
 * Voting transactions
-* Entity management
+* Candidate and voter management
 * Input validation
 * Prevention of duplicate voting
+* Vote counting
 
 ## 👨‍💻 Author
 
-**Akshay B**
+**Akshay Bodhankar**
 
 GitHub: `https://github.com/Akshay-Bodhankar`

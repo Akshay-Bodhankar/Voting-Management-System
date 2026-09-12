@@ -129,9 +129,10 @@ if __name__ == "__main__":
         print("1. Add Candidate")
         print("2. Add Voter")
         print("3. Cast Vote")
-        print("4. Print Blockchain")
-        print("5. Validate Chain")
-        print("6. Exit")
+        print("4. Count votes")
+        print("5. Print Blockchain")
+        print("6. Validate Chain")
+        print("7. Exit")
 
         choice = input("Enter your choice: ")
 
@@ -151,15 +152,23 @@ if __name__ == "__main__":
             blockchain.cast_vote(voter_id, candidate_id)
 
         elif choice == "4":
-            blockchain.print_blockchain()
+            print("\n=====Vote Count=====")
+
+            vote_counts = blockchain.count_votes()
+            for candidate_id, count in vote_counts.items():
+                candidate = blockchain.candidates[candidate_id]
+                print(f"\n{candidate_id} - {candidate.name}: {count} vote(s) ")
 
         elif choice == "5":
+            blockchain.print_blockchain()
+
+        elif choice == "6":
             if blockchain.is_chain_valid():
                 print("Blockchain is valid.")
             else:
                 print("Blockchain is not valid.")
 
-        elif choice == "6":
+        elif choice == "7":
             print("Exiting Voting Management System.")
             break
 
